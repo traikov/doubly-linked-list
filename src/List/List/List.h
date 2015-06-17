@@ -138,6 +138,7 @@ public:
 
 	~List<T>()
 	{
+		this->clear();
 	}
 
 
@@ -298,7 +299,24 @@ public:
 	*/
 	void insert(iterator it, const T& value)
 	{
+		Node<T> *tmpPrev = it.getNode()->m_prev;
 
+		Node<T> *newNode = new Node<T>();
+		newNode->m_data = value;
+		newNode->m_prev = tmpPrev;
+		newNode->m_next = it.getNode();
+
+
+		if (tmpPrev != nullptr)
+		{
+			tmpPrev->m_next = newNode;
+		}
+		else
+		{
+			this->m_front_node = newNode;
+		}
+
+		this->m_size++;
 	}
 
 	/**
@@ -312,9 +330,10 @@ public:
 		Node<T> *tmpPrev = it.getNode()->m_prev;
 		Node<T> *tmpNext = it.getNode()->m_next;
 		delete it.getNode();
-		
+
 		tmpPrev->m_next = tmpNext;
 		tmpNext->m_prev = tmpPrev;
+		this->m_size--;
 	}
 
 	/**
